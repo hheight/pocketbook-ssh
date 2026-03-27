@@ -1,23 +1,20 @@
-import os
 import subprocess
 
 from style_text import style_text
 
-ssh_keys_dirname = "ssh_keys"
-ssh_keys_path = f"{os.path.abspath(os.getcwd())}/{ssh_keys_dirname}"
 
-def generate_keys():
-    if not os.path.isdir(ssh_keys_path):
-        os.mkdir(ssh_keys_dirname);
+def generate_keys(path):
+    """
+    Generates SSH key pair with `ssh-keygen`.
+    ECDSA key format is used.
+    """
 
     subprocess.run([
         "ssh-keygen",
         "-t", "ecdsa",
-        "-f", f"{ssh_keys_path}/ecdsa",
+        "-f", f"{path}/ecdsa",
         "-N", ""
     ])
-
-    print_next_steps()
 
 def print_next_steps():
     print("\n")

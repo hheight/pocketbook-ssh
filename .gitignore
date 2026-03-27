@@ -10,4 +10,7 @@ wheels/
 .venv
 
 # Generated SSH keys files
-ssh_keys/
+.keys/
+
+# SFTP commands file
+sftp_commands.txt
