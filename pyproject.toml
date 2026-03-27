@@ -4,4 +4,6 @@ version = "0.1.0"
 description = "Transfer files to/from your PocketBook e-reader through SSH"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "prompt-toolkit>=3.0.52",
+]
