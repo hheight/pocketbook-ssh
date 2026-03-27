@@ -1,0 +1,7 @@
+[project]
+name = "pocketbook-ssh"
+version = "0.1.0"
+description = "Transfer files to/from your PocketBook e-reader through SSH"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
