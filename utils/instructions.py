@@ -1,4 +1,4 @@
-from style_text import style_text
+from utils.style_text import style_text
 
 def print_keys_instructions():
     print(style_text(style_text("Next steps:", "bold"), "green"))

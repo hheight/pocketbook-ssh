@@ -10,7 +10,7 @@ from pathlib import Path
 
 ROOT_PATH = Path("/")
 
-prompt_style = Style.from_dict({
+style = Style.from_dict({
     # User input (default text).
     "": "ansicyan",
 
@@ -35,14 +35,14 @@ def transfer_files(action, keys_path):
         download_from = prompt(
             [("class:title", "FROM: ")],
             default=device_homepath,
-            style=prompt_style
+            style=style
         )
         download_from_path = ROOT_PATH / device_homepath / download_from
 
         save_to = prompt(
             [("class:title", "TO: ")],
             default=str(ROOT_PATH),
-            style=prompt_style
+            style=style
         )
         save_to_path = ROOT_PATH / save_to
 
@@ -53,14 +53,14 @@ def transfer_files(action, keys_path):
         upload_from = prompt(
             [("class:title", "FROM: ")],
             default=str(ROOT_PATH),
-            style=prompt_style
+            style=style
         )
         upload_from_path = ROOT_PATH / upload_from
 
         upload_to = prompt(
             [("class:title", "TO: ")],
             default=device_homepath,
-            style=prompt_style
+            style=style
         )
         upload_to_path = ROOT_PATH / device_homepath / upload_to
 

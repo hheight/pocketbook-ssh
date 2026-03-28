@@ -4,13 +4,13 @@ from prompt_toolkit.styles import Style
 from pathlib import Path
 
 from constants import KEYS_DIRNAME
-from generate_keys import generate_keys
-from instructions import print_config_instructions, print_keys_instructions
-from style_text import style_text
-from transfer_files import transfer_files
-from config_setup import config_setup
+from commands.generate_keys import generate_keys
+from commands.transfer_files import transfer_files
+from commands.setup_config import setup_config
+from utils.instructions import print_config_instructions, print_keys_instructions
+from utils.style_text import style_text
 
-style = Style.from_dict({
+prompt_style = Style.from_dict({
     "key": "ansiyellow",
 })
 
@@ -20,7 +20,7 @@ def main():
 
     while True:
         main_menu_choice = choice(
-            message="Please choose an option:",
+            message="Main menu",
             options=[
                 ("transfer", "Transfer files to/from your PocketBook"),
                 ("generate", "Generate a new ssh key pair"),
@@ -42,39 +42,42 @@ def main():
                     print(f"{style_text('Error:', 'red')} Failed to generate ssh keys.")
 
             case "transfer":
-                transfer_choice = choice(
-                    message="What do you want to do next?",
-                    options=[
-                        ("download", "Download files from the device"),
-                        ("upload", "Upload files to the device"),
-                    ],
-                )
-
                 try:
+                    transfer_choice = choice(
+                        message="Choose an option:",
+                        options=[
+                            ("download", "Download files from the device"),
+                            ("upload", "Upload files to the device"),
+                        ],
+                    )
+
                     transfer_files(transfer_choice, keys_path)
                 except KeyboardInterrupt:
                     print("\n")
-                    print("Operation canceled by user.")
+                    print("Operation canceled.")
                 except Exception as e:
                     print(e)
 
             case "config":
                 print_config_instructions()
 
-                homepath = prompt([
-                    ("class:key", "Home path: "),
-                ], default="/", style=style)
-
-                port = prompt([
-                    ("class:key", "PORT: "),
-                ], style=style)
-
-                ip = prompt([
-                    ("class:key", "IP: "),
-                ], style=style)
-
                 try:
-                    config_setup(homepath, port, ip)
+                    homepath = prompt([
+                        ("class:key", "Home path: "),
+                    ], default="/", style=prompt_style)
+
+                    port = prompt([
+                        ("class:key", "PORT: "),
+                    ], style=prompt_style)
+
+                    ip = prompt([
+                        ("class:key", "IP: "),
+                    ], style=prompt_style)
+
+                    setup_config(homepath, port, ip)
+                except KeyboardInterrupt:
+                    print("\n")
+                    print("Operation canceled.")
                 except Exception as e:
                     print(e)
 
@@ -85,8 +88,8 @@ def main():
         prompt([
             ("", "Press "),
             ("class:key", "Enter"),
-            ("", " to return to the main menu...")
-        ], style=style)
+            ("", " to return to main menu...")
+        ], style=prompt_style)
 
 
 if __name__ == "__main__":
