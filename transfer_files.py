@@ -25,11 +25,7 @@ def transfer_files(action, keys_path):
     SFTP (SSH File Transfer Protocol) is a secure file protocol for accessing, managing, and transferring files over an encrypted SSH connection.
     """
 
-    try:
-        config = get_config()
-    except Exception as e:
-        print(e)
-        return
+    config = get_config()
 
     device_homepath = config.get("homepath")
     device_ip = config.get("ip")
@@ -71,17 +67,9 @@ def transfer_files(action, keys_path):
         with open(COMMANDS_FILE, "w") as f:
             f.write(f"put -r {upload_from_path} {upload_to_path}\nbye")
 
-    try:
-        print("Connecting to the device...")
-        run_commands(keys_path, str(device_port), device_ip)
-        print(style_text("Files transfered successfully!", "green"))
-    except KeyboardInterrupt:
-        print("\n")
-        print("Operation canceled by user.")
-        return
-    except Exception as e:
-        print(e)
-        return
+    print("Connecting to the device...")
+    run_commands(keys_path, str(device_port), device_ip)
+    print(style_text("Files transfered successfully!", "green"))
 
 def run_commands(keys_path, port, ip):
     process = subprocess.Popen(
@@ -97,19 +85,15 @@ def run_commands(keys_path, port, ip):
         text=True
     )
 
-    output_lines = []
-
     if process.stdout:
         for line in process.stdout:
             print(line, end="")
-            output_lines.append(line)
 
     process.wait()
 
     if process.returncode != 0:
         raise Exception(
-            f"{style_text('SFTP failed', 'red')} (code {process.returncode})\n"
-            f"{''.join(output_lines)}"
+            f"{style_text('SFTP failed', 'red')} (code {process.returncode})"
         )
 
 def get_config():
