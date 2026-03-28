@@ -14,3 +14,6 @@ wheels/
 
 # SFTP commands file
 sftp_commands.txt
+
+# Device config file
+device_config.json

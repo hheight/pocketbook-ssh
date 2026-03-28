@@ -1,13 +1,15 @@
-import os
 from prompt_toolkit.shortcuts import choice, prompt
+from constants import KEYS_DIRNAME
 from generate_keys import generate_keys, print_next_steps
 from style_text import style_text
 from transfer_files import transfer_files
+from pathlib import Path
 
-keys_dirname = ".keys"
-keys_path = os.path.join(os.path.abspath(os.getcwd()), keys_dirname)
 
 def main():
+    base_dir = Path(__file__).resolve().parent
+    keys_path = base_dir / KEYS_DIRNAME
+
     while True:
         main_menu_choice = choice(
             message="Please choose an option:",
@@ -21,8 +23,8 @@ def main():
         match(main_menu_choice):
             case "generate":
 
-                if not os.path.isdir(keys_path):
-                    os.mkdir(keys_dirname);
+                if not keys_path.exists():
+                    keys_path.mkdir(parents=True, exist_ok=True)
 
                 try:
                     generate_keys(keys_path)
