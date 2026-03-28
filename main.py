@@ -1,9 +1,12 @@
 from prompt_toolkit.shortcuts import choice, prompt
+from prompt_toolkit.styles import Style
+
+from pathlib import Path
+
 from constants import KEYS_DIRNAME
 from generate_keys import generate_keys, print_next_steps
 from style_text import style_text
 from transfer_files import transfer_files
-from pathlib import Path
 
 
 def main():
@@ -43,10 +46,18 @@ def main():
 
                 transfer_files(transfer_choice, keys_path)
             case "exit":
-                print(style_text(style_text("See you!", "blue"), "bold"))
+                print(style_text("See you!", "yellow"))
                 break
 
-        prompt("Press Enter to return to the main menu...")
+        style = Style.from_dict({
+            "key": "ansiyellow",
+        })
+
+        prompt([
+            ("", "Press "),
+            ("class:key", "Enter"),
+            ("", " to return to the main menu...")
+        ], style=style)
 
 
 if __name__ == "__main__":

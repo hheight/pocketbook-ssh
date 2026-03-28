@@ -1,12 +1,23 @@
 import json
-import os
 import subprocess
 
 from prompt_toolkit.shortcuts import prompt
+from prompt_toolkit.styles import Style
+
 from constants import CONFIG_FILE, COMMANDS_FILE
 from style_text import style_text
 from pathlib import Path
 
+ROOT_PATH = Path("/")
+
+style = Style.from_dict({
+    # User input (default text).
+    "": "ansicyan",
+
+    # Prompt.
+    "title": "ansiyellow",
+    "path": "ansicyan",
+})
 
 def transfer_files(action, keys_path):
     """
@@ -20,10 +31,24 @@ def transfer_files(action, keys_path):
         print(e)
         return
 
+    device_homepath = config.get("homepath")
+    device_ip = config.get("ip")
+    device_port = config.get("port")
+
     if action == "download":
-        device_files_path = prompt("Enter the path to a file or folder from the device's home folder: ")
-        download_from_path = os.path.join("/", config["homepath"], device_files_path)
-        save_to_path = os.path.join("/", prompt("Enter the path where to save files: "))
+        download_from = prompt(
+            [("class:title", "FROM: ")],
+            default=device_homepath,
+            style=style
+        )
+        download_from_path = ROOT_PATH / device_homepath / download_from
+
+        save_to = prompt(
+            [("class:title", "TO: ")],
+            default=str(ROOT_PATH),
+            style=style
+        )
+        save_to_path = ROOT_PATH / save_to
 
         with open(COMMANDS_FILE, "w") as f:
             f.write(f"get -r {download_from_path} {save_to_path}\nbye")
@@ -33,13 +58,17 @@ def transfer_files(action, keys_path):
 
     try:
         print("Connecting to the device...")
-        connect_to_device(keys_path, str(config["port"]), config["ip"])
+        run_commands(keys_path, str(device_port), device_ip)
         print(style_text("Files transfered successfully!", "green"))
+    except KeyboardInterrupt:
+        print("\n")
+        print("Operation canceled by user.")
+        return
     except Exception as e:
         print(e)
         return
 
-def connect_to_device(keys_path, port, ip):
+def run_commands(keys_path, port, ip):
     process = subprocess.Popen(
         [
             "sftp",
