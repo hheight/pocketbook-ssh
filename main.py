@@ -1,10 +1,11 @@
+import json
 from pathlib import Path
 
 from prompt_toolkit.shortcuts import choice, prompt
 from prompt_toolkit.styles import Style
 
 from commands.generate_keys import generate_keys
-from commands.setup_config import setup_config
+from commands.setup_config import get_default_config_values, setup_config
 from commands.transfer_files import transfer_files
 from constants import KEYS_DIRNAME
 from utils.instructions import print_config_instructions, print_keys_instructions
@@ -64,11 +65,15 @@ def main():
                 print_config_instructions()
 
                 try:
+                    default_homepath, default_ip, default_port = (
+                        get_default_config_values()
+                    )
+
                     homepath = prompt(
                         [
                             ("class:key", "Home path: "),
                         ],
-                        default="/",
+                        default=default_homepath,
                         style=prompt_style,
                     )
 
@@ -76,6 +81,7 @@ def main():
                         [
                             ("class:key", "PORT: "),
                         ],
+                        default=default_port,
                         style=prompt_style,
                     )
 
@@ -83,6 +89,7 @@ def main():
                         [
                             ("class:key", "IP: "),
                         ],
+                        default=default_ip,
                         style=prompt_style,
                     )
 

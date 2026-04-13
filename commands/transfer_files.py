@@ -1,11 +1,11 @@
-import json
 import subprocess
 from pathlib import Path
 
 from prompt_toolkit.shortcuts import prompt
 from prompt_toolkit.styles import Style
 
-from constants import COMMANDS_FILE, CONFIG_FILE
+from commands.setup_config import get_config
+from constants import COMMANDS_FILE
 from utils.style_text import style_text
 
 ROOT_PATH = Path("/")
@@ -91,21 +91,3 @@ def run_commands(keys_path, port, ip):
         raise Exception(
             f"{style_text('SFTP failed', 'red')} (code {process.returncode})"
         )
-
-
-def get_config():
-    config_path = Path(CONFIG_FILE)
-
-    if not config_path.exists() or not config_path.read_text():
-        raise Exception(
-            f"{style_text('Missing config file.', 'red')} Please setup device config from the main menu."
-        )
-
-    config = json.loads(config_path.read_text())
-
-    if not config.get("homepath") or not config.get("ip") or not config.get("port"):
-        raise Exception(
-            f"{style_text('Missing config elements.', 'red')} Please fill device config."
-        )
-
-    return config
