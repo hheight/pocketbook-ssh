@@ -7,4 +7,7 @@ def generate_keys(path):
     ECDSA key format is used.
     """
 
-    subprocess.run(["ssh-keygen", "-t", "ecdsa", "-f", f"{path}/ecdsa", "-N", ""])
+    result = subprocess.run(
+        ["ssh-keygen", "-t", "ecdsa", "-f", f"{path}/ecdsa", "-N", ""],
+    )
+    return result.returncode == 0

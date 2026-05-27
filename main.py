@@ -39,8 +39,8 @@ def main():
                         keys_path.mkdir(parents=True, exist_ok=True)
 
                     try:
-                        generate_keys(keys_path)
-                        print_keys_instructions()
+                        if generate_keys(keys_path):
+                            print_keys_instructions()
                     except Exception:
                         print(
                             f"{style_text('Error:', 'red')} Failed to generate ssh keys."
