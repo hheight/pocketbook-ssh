@@ -1,6 +1,7 @@
 import subprocess
 from pathlib import Path
 
+from prompt_toolkit.completion import PathCompleter
 from prompt_toolkit.shortcuts import prompt
 from prompt_toolkit.styles import Style
 
@@ -9,6 +10,7 @@ from constants import COMMANDS_FILE
 from utils.style_text import style_text
 
 ROOT_PATH = Path("/")
+path_completer = PathCompleter(only_directories=False, expanduser=True)
 
 style = Style.from_dict(
     {
@@ -17,6 +19,10 @@ style = Style.from_dict(
         # Prompt.
         "title": "ansiyellow",
         "path": "ansicyan",
+        # Autocomplete menu
+        "completion-menu": "bg:ansicyan #ffffff",
+        "completion-menu.completion": "bg:ansicyan #ffffff",
+        "completion-menu.completion.current": "bg:ansicyan #ffffff",
     }
 )
 
@@ -39,7 +45,12 @@ def transfer_files(action, keys_path):
         )
         download_from_path = ROOT_PATH / device_homepath / download_from
 
-        save_to = prompt([("class:title", "TO: ")], default=str(ROOT_PATH), style=style)
+        save_to = prompt(
+            [("class:title", "TO: ")],
+            default=str(ROOT_PATH),
+            completer=path_completer,
+            style=style,
+        )
         save_to_path = ROOT_PATH / save_to
 
         with open(COMMANDS_FILE, "w") as f:
@@ -47,7 +58,10 @@ def transfer_files(action, keys_path):
 
     elif action == "upload":
         upload_from = prompt(
-            [("class:title", "FROM: ")], default=str(ROOT_PATH), style=style
+            [("class:title", "FROM: ")],
+            default=str(ROOT_PATH),
+            completer=path_completer,
+            style=style,
         )
         upload_from_path = ROOT_PATH / upload_from
 

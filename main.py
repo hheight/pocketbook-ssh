@@ -48,8 +48,8 @@ def main():
                     transfer_choice = choice(
                         message="Choose an option:",
                         options=[
-                            ("download", "Download files from the device"),
                             ("upload", "Upload files to the device"),
+                            ("download", "Download files from the device"),
                         ],
                     )
 
