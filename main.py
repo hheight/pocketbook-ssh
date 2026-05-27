@@ -22,95 +22,111 @@ def main():
     keys_path = base_dir / KEYS_DIRNAME
 
     while True:
-        main_menu_choice = choice(
-            message="Main menu",
-            options=[
-                ("transfer", "Transfer files to/from your PocketBook"),
-                ("generate", "Generate a new ssh key pair"),
-                ("config", "Setup device config"),
-                ("exit", "Exit"),
-            ],
-        )
+        try:
+            main_menu_choice = choice(
+                message="Main menu",
+                options=[
+                    ("transfer", "Transfer files to/from your PocketBook"),
+                    ("generate", "Generate a new ssh key pair"),
+                    ("config", "Setup device config"),
+                    ("exit", "Exit"),
+                ],
+            )
 
-        match main_menu_choice:
-            case "generate":
-                if not keys_path.exists():
-                    keys_path.mkdir(parents=True, exist_ok=True)
+            match main_menu_choice:
+                case "generate":
+                    if not keys_path.exists():
+                        keys_path.mkdir(parents=True, exist_ok=True)
 
-                try:
-                    generate_keys(keys_path)
-                    print_keys_instructions()
-                except Exception:
-                    print(f"{style_text('Error:', 'red')} Failed to generate ssh keys.")
+                    try:
+                        generate_keys(keys_path)
+                        print_keys_instructions()
+                    except Exception:
+                        print(
+                            f"{style_text('Error:', 'red')} Failed to generate ssh keys."
+                        )
 
-            case "transfer":
-                try:
-                    transfer_choice = choice(
-                        message="Choose an option:",
-                        options=[
-                            ("upload", "Upload files to the device"),
-                            ("download", "Download files from the device"),
-                        ],
-                    )
+                case "transfer":
+                    try:
+                        transfer_choice = choice(
+                            message="Choose an option:",
+                            options=[
+                                ("upload", "Upload files to the device"),
+                                ("download", "Download files from the device"),
+                            ],
+                        )
 
-                    transfer_files(transfer_choice, keys_path)
-                except KeyboardInterrupt:
-                    print("\n")
-                    print("Operation canceled.")
-                except Exception as e:
-                    print(e)
+                        transfer_files(transfer_choice, keys_path)
+                    except KeyboardInterrupt:
+                        print("\n")
+                        print("Operation canceled.")
+                    except Exception as e:
+                        print(e)
 
-            case "config":
-                print_config_instructions()
+                case "config":
+                    print_config_instructions()
 
-                try:
-                    default_homepath, default_ip, default_port = (
-                        get_default_config_values()
-                    )
+                    try:
+                        default_homepath, default_ip, default_port = (
+                            get_default_config_values()
+                        )
 
-                    homepath = prompt(
-                        [
-                            ("class:key", "Home path: "),
-                        ],
-                        default=default_homepath,
-                        style=prompt_style,
-                    )
+                        homepath = prompt(
+                            [
+                                ("class:key", "Home path: "),
+                            ],
+                            default=default_homepath,
+                            style=prompt_style,
+                        )
 
-                    port = prompt(
-                        [
-                            ("class:key", "PORT: "),
-                        ],
-                        default=default_port,
-                        style=prompt_style,
-                    )
+                        port = prompt(
+                            [
+                                ("class:key", "PORT: "),
+                            ],
+                            default=default_port,
+                            style=prompt_style,
+                        )
 
-                    ip = prompt(
-                        [
-                            ("class:key", "IP: "),
-                        ],
-                        default=default_ip,
-                        style=prompt_style,
-                    )
+                        ip = prompt(
+                            [
+                                ("class:key", "IP: "),
+                            ],
+                            default=default_ip,
+                            style=prompt_style,
+                        )
 
-                    setup_config(homepath, port, ip)
-                except KeyboardInterrupt:
-                    print("\n")
-                    print("Operation canceled.")
-                except Exception as e:
-                    print(e)
+                        setup_config(homepath, port, ip)
+                    except KeyboardInterrupt:
+                        print("\n")
+                        print("Operation canceled.")
+                    except Exception as e:
+                        print(e)
 
-            case "exit":
+                case "exit":
+                    print(style_text("See you!", "green"))
+                    break
+
+            prompt(
+                [
+                    ("", "Press "),
+                    ("class:key", "Enter"),
+                    ("", " to return to main menu..."),
+                ],
+                style=prompt_style,
+            )
+        except KeyboardInterrupt:
+            try:
+                prompt(
+                    [
+                        ("", "Press "),
+                        ("class:key", "Ctrl+C"),
+                        ("", " again to exit..."),
+                    ],
+                    style=prompt_style,
+                )
+            except KeyboardInterrupt:
                 print(style_text("See you!", "green"))
                 break
-
-        prompt(
-            [
-                ("", "Press "),
-                ("class:key", "Enter"),
-                ("", " to return to main menu..."),
-            ],
-            style=prompt_style,
-        )
 
 
 if __name__ == "__main__":
