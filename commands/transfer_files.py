@@ -75,7 +75,7 @@ def transfer_files(action, keys_path):
 
     print("Connecting to the device...")
     run_commands(keys_path, str(device_port), device_ip)
-    print(style_text("Files transfered successfully!", "green"))
+    print(style_text("Files transferred successfully!", "green"))
 
 
 def run_commands(keys_path, port, ip):

@@ -28,7 +28,7 @@ def main():
                 options=[
                     ("transfer", "Transfer files to/from your PocketBook"),
                     ("generate", "Generate a new ssh key pair"),
-                    ("config", "Setup device config"),
+                    ("config", "Set up device config"),
                     ("exit", "Exit"),
                 ],
             )
