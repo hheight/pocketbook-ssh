@@ -54,7 +54,7 @@ def transfer_files(action, keys_path):
         save_to_path = ROOT_PATH / save_to
 
         with open(COMMANDS_FILE, "w") as f:
-            f.write(f"get -r {download_from_path} {save_to_path}\nbye")
+            f.write(f'get -r "{download_from_path}" "{save_to_path}"\nbye')
 
     elif action == "upload":
         upload_from = prompt(
@@ -71,7 +71,7 @@ def transfer_files(action, keys_path):
         upload_to_path = ROOT_PATH / device_homepath / upload_to
 
         with open(COMMANDS_FILE, "w") as f:
-            f.write(f"put -r {upload_from_path} {upload_to_path}\nbye")
+            f.write(f'put -r "{upload_from_path}" "{upload_to_path}"\nbye')
 
     print("Connecting to the device...")
     run_commands(keys_path, str(device_port), device_ip)
