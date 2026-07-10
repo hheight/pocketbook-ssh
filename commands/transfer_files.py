@@ -84,6 +84,7 @@ def run_commands(keys_path, port, ip):
             "sftp",
             "-b",
             COMMANDS_FILE,
+            "-N",
             "-i",
             f"{keys_path}/ecdsa",
             "-P",
@@ -97,11 +98,9 @@ def run_commands(keys_path, port, ip):
 
     if process.stdout:
         for line in process.stdout:
-            print(line, end="")
+            print(line)
 
-    process.wait()
-
-    if process.returncode != 0:
+    if process.wait() != 0:
         raise Exception(
             f"{style_text('SFTP failed', 'red')} (code {process.returncode})"
         )
