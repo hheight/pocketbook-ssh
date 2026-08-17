@@ -20,7 +20,8 @@ This CLI application allows you to transfer files to/from your e-reader using SF
 
 - Generate SSH keys using `ssh-keygen` for secure file transfer.
 - Set up config by entering the device's home path, SSH server IP, and port.
-- Download or upload files using `sftp`.
+- Transfer files using `sftp`.
+- Check connection with the device using `ssh`.
 
 ## Troubleshooting
 
@@ -28,5 +29,10 @@ Common issues and how to resolve them.
 
 #### SSH server's IP address has been changed
 
-1. Select `Setup device config` in the main menu and set the new IP address.
-2. Replace the old IP address in the `~/.ssh/known_hosts` file with the new one.
+1. Select `Set up device config` in the main menu and set the new IP address.
+2. Replace (or delete) an old IP address in the `~/.ssh/known_hosts` file.
+
+#### SSH connection failed
+
+1. Make sure `...koreader/settings/SSH/authorized_keys` has the contents of the `.keys/ecdsa.pub` file.
+2. Delete a device's IP address from the `~/.ssh/known_hosts` file and run `Check connection` command from the main menu.
