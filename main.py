@@ -28,9 +28,9 @@ def main():
                 message="Main menu",
                 options=[
                     ("transfer", "Transfer files"),
+                    ("connect", "Check connection"),
                     ("generate", "Generate a new SSH key pair"),
                     ("config", "Set up device config"),
-                    ("connect", "Check connection"),
                     ("exit", "Exit"),
                 ],
             )
