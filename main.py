@@ -3,6 +3,7 @@ from pathlib import Path
 from prompt_toolkit.shortcuts import choice, prompt
 from prompt_toolkit.styles import Style
 
+from commands.check_connection import check_connection
 from commands.generate_keys import generate_keys
 from commands.setup_config import get_default_config_values, setup_config
 from commands.transfer_files import transfer_files
@@ -26,9 +27,10 @@ def main():
             main_menu_choice = choice(
                 message="Main menu",
                 options=[
-                    ("transfer", "Transfer files to/from your PocketBook"),
-                    ("generate", "Generate a new ssh key pair"),
+                    ("transfer", "Transfer files"),
+                    ("generate", "Generate a new SSH key pair"),
                     ("config", "Set up device config"),
+                    ("connect", "Check connection"),
                     ("exit", "Exit"),
                 ],
             )
@@ -51,8 +53,8 @@ def main():
                         transfer_choice = choice(
                             message="Choose an option:",
                             options=[
-                                ("upload", "Upload files to the device"),
-                                ("download", "Download files from the device"),
+                                ("upload", "Upload"),
+                                ("download", "Download"),
                             ],
                         )
 
@@ -99,6 +101,12 @@ def main():
                     except KeyboardInterrupt:
                         print("\n")
                         print("Operation canceled.")
+                    except Exception as e:
+                        print(e)
+
+                case "connect":
+                    try:
+                        check_connection(keys_path)
                     except Exception as e:
                         print(e)
 
