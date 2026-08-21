@@ -1,41 +1,41 @@
 import unittest
 
-from style_text import style_text
+from text import style
 
 
 class TestStyleText(unittest.TestCase):
     def test_red(self):
         text = "test"
-        styled_text = style_text(text, "red")
+        styled_text = style(text, "red")
 
         self.assertEqual(styled_text, f"\033[31m{text}\033[0m")
 
     def test_green(self):
         text = "test"
-        styled_text = style_text(text, "green")
+        styled_text = style(text, "green")
 
         self.assertEqual(styled_text, f"\033[32m{text}\033[0m")
 
     def test_yellow(self):
         text = "test"
-        styled_text = style_text(text, "yellow")
+        styled_text = style(text, "yellow")
 
         self.assertEqual(styled_text, f"\033[33m{text}\033[0m")
 
     def test_blue(self):
         text = "test"
-        styled_text = style_text(text, "blue")
+        styled_text = style(text, "blue")
 
         self.assertEqual(styled_text, f"\033[34m{text}\033[0m")
 
     def test_bold(self):
         text = "test"
-        styled_text = style_text(text, "bold")
+        styled_text = style(text, "bold")
 
         self.assertEqual(styled_text, f"\033[1m{text}\033[0m")
 
     def test_default(self):
         text = "test"
-        styled_text = style_text(text, "default")
+        styled_text = style(text, "default")
 
         self.assertEqual(styled_text, text)

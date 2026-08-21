@@ -3,13 +3,9 @@ from pathlib import Path
 from prompt_toolkit.shortcuts import choice, prompt
 from prompt_toolkit.styles import Style
 
-from commands.check_connection import check_connection
-from commands.generate_keys import generate_keys
-from commands.setup_config import get_default_config_values, setup_config
-from commands.transfer_files import transfer_files
+from commands import config, connection, files, keys
 from constants import KEYS_DIRNAME
-from utils.instructions import print_config_instructions, print_keys_instructions
-from utils.style_text import style_text
+from utils import instructions, text
 
 prompt_style = Style.from_dict(
     {
@@ -41,11 +37,11 @@ def main():
                         keys_path.mkdir(parents=True, exist_ok=True)
 
                     try:
-                        if generate_keys(keys_path):
-                            print_keys_instructions()
+                        if keys.generate(keys_path):
+                            instructions.show("keys")
                     except Exception:
                         print(
-                            f"{style_text('Error:', 'red')} Failed to generate ssh keys."
+                            f"{text.style('Error:', 'red')} Failed to generate ssh keys."
                         )
 
                 case "transfer":
@@ -58,7 +54,7 @@ def main():
                             ],
                         )
 
-                        transfer_files(transfer_choice, keys_path)
+                        files.transfer(transfer_choice, keys_path)
                     except KeyboardInterrupt:
                         print("\n")
                         print("Operation canceled.")
@@ -66,11 +62,11 @@ def main():
                         print(e)
 
                 case "config":
-                    print_config_instructions()
+                    instructions.show("config")
 
                     try:
                         default_homepath, default_ip, default_port = (
-                            get_default_config_values()
+                            config.get_default_values()
                         )
 
                         homepath = prompt(
@@ -97,7 +93,7 @@ def main():
                             style=prompt_style,
                         )
 
-                        setup_config(homepath, port, ip)
+                        config.write_to_file(homepath, port, ip)
                     except KeyboardInterrupt:
                         print("\n")
                         print("Operation canceled.")
@@ -106,12 +102,12 @@ def main():
 
                 case "connect":
                     try:
-                        check_connection(keys_path)
+                        connection.check(keys_path)
                     except Exception as e:
                         print(e)
 
                 case "exit":
-                    print(style_text("See you!", "green"))
+                    print(text.style("See you!", "green"))
                     break
 
             prompt(
@@ -133,7 +129,7 @@ def main():
                     style=prompt_style,
                 )
             except KeyboardInterrupt:
-                print(style_text("See you!", "green"))
+                print(text.style("See you!", "green"))
                 break
 
 

@@ -1,7 +1,7 @@
 import subprocess
 
 
-def generate_keys(path):
+def generate(path):
     """
     Generates SSH key pair with `ssh-keygen`.
     ECDSA key format is used.

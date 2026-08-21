@@ -5,9 +5,9 @@ from prompt_toolkit.completion import PathCompleter
 from prompt_toolkit.shortcuts import prompt
 from prompt_toolkit.styles import Style
 
-from commands.setup_config import get_config
+from commands import config
 from constants import COMMANDS_FILE
-from utils.style_text import style_text
+from utils import text
 
 ROOT_PATH = Path("/")
 path_completer = PathCompleter(only_directories=False, expanduser=True)
@@ -27,17 +27,17 @@ style = Style.from_dict(
 )
 
 
-def transfer_files(action, keys_path):
+def transfer(action, keys_path):
     """
     Transfers files between devices using SFTP.
     SFTP (SSH File Transfer Protocol) is a secure file protocol for accessing, managing, and transferring files over an encrypted SSH connection.
     """
 
-    config = get_config()
+    cfg_obj = config.get()
 
-    device_homepath = config.get("homepath")
-    device_ip = config.get("ip")
-    device_port = config.get("port")
+    device_homepath = cfg_obj.get("homepath")
+    device_ip = cfg_obj.get("ip")
+    device_port = cfg_obj.get("port")
 
     if action == "download":
         download_from = prompt(
@@ -74,11 +74,11 @@ def transfer_files(action, keys_path):
             f.write(f'put -r "{upload_from_path}" "{upload_to_path}"\nbye')
 
     print("Connecting to the device...")
-    run_commands(keys_path, str(device_port), device_ip)
-    print(style_text("Files transferred successfully!", "green"))
+    _run_commands(keys_path, str(device_port), device_ip)
+    print(text.style("Files transferred successfully!", "green"))
 
 
-def run_commands(keys_path, port, ip):
+def _run_commands(keys_path, port, ip):
     process = subprocess.Popen(
         [
             "sftp",
@@ -102,5 +102,5 @@ def run_commands(keys_path, port, ip):
 
     if process.wait() != 0:
         raise Exception(
-            f"{style_text('SFTP failed', 'red')} (code {process.returncode})"
+            f"{text.style('SFTP failed', 'red')} (code {process.returncode})"
         )

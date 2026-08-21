@@ -1,17 +1,14 @@
 import subprocess
 
-from commands.setup_config import get_config
-from utils.style_text import style_text
+from commands import config
+from utils import text
 
 
-def check_connection(keys_path):
+def check(keys_path):
     """
     Checks SSH connection with the device.
     """
-    config = get_config()
-
-    device_ip = config.get("ip")
-    device_port = config.get("port")
+    cfg_obj = config.get()
 
     process = subprocess.Popen(
         [
@@ -20,8 +17,8 @@ def check_connection(keys_path):
             "-i",
             f"{keys_path}/ecdsa",
             "-p",
-            str(device_port),
-            f"reader@{device_ip}",
+            str(cfg_obj.get("port")),
+            f"reader@{cfg_obj.get('ip')}",
             "exit",
         ],
         stdout=subprocess.PIPE,
@@ -35,7 +32,7 @@ def check_connection(keys_path):
 
     if process.wait() != 0:
         raise Exception(
-            f"{style_text('Connection failed', 'red')} (code {process.returncode})"
+            f"{text.style('Connection failed', 'red')} (code {process.returncode})"
         )
     else:
-        print(style_text("Successful connection", "green"))
+        print(text.style("Successful connection", "green"))
