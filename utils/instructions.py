@@ -1,7 +1,9 @@
 from utils import text
 
 
-def show(content):
+def show(content: str) -> None:
+    """Print instructions for a given content"""
+
     match content:
         case "keys":
             print(text.style(text.style("Next steps:", "bold"), "green"))

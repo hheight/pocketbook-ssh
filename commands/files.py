@@ -1,5 +1,6 @@
 import subprocess
 from pathlib import Path
+from typing import Literal
 
 from prompt_toolkit.completion import PathCompleter
 from prompt_toolkit.shortcuts import prompt
@@ -27,17 +28,18 @@ style = Style.from_dict(
 )
 
 
-def transfer(action, keys_path):
+def transfer(action: Literal["download", "upload"], keys_path: Path) -> None:
     """
-    Transfers files between devices using SFTP.
+    Transfer files between devices using SFTP.
+
     SFTP (SSH File Transfer Protocol) is a secure file protocol for accessing, managing, and transferring files over an encrypted SSH connection.
     """
 
     cfg_obj = config.get()
 
-    device_homepath = cfg_obj.get("homepath")
-    device_ip = cfg_obj.get("ip")
-    device_port = cfg_obj.get("port")
+    device_homepath = cfg_obj["homepath"]
+    device_ip = cfg_obj["ip"]
+    device_port = cfg_obj["port"]
 
     if action == "download":
         download_from = prompt(
@@ -53,10 +55,9 @@ def transfer(action, keys_path):
         )
         save_to_path = ROOT_PATH / save_to
 
-        with open(COMMANDS_FILE, "w") as f:
-            f.write(f'get -r "{download_from_path}" "{save_to_path}"\nbye')
+        _write_to_commands_file("get", download_from_path, save_to_path)
 
-    elif action == "upload":
+    if action == "upload":
         upload_from = prompt(
             [("class:title", "FROM: ")],
             default=str(ROOT_PATH),
@@ -70,15 +71,25 @@ def transfer(action, keys_path):
         )
         upload_to_path = ROOT_PATH / device_homepath / upload_to
 
-        with open(COMMANDS_FILE, "w") as f:
-            f.write(f'put -r "{upload_from_path}" "{upload_to_path}"\nbye')
+        _write_to_commands_file("put", upload_from_path, upload_to_path)
 
     print("Connecting to the device...")
     _run_commands(keys_path, str(device_port), device_ip)
     print(text.style("Files transferred successfully!", "green"))
 
 
-def _run_commands(keys_path, port, ip):
+def _write_to_commands_file(
+    command: Literal["put", "get"], from_path: Path, to_path: Path
+) -> None:
+    """Write commands to a file."""
+
+    with open(COMMANDS_FILE, "w") as f:
+        f.write(f'{command} -r "{from_path}" "{to_path}"\nbye')
+
+
+def _run_commands(keys_path: Path, port: str, ip: str) -> None:
+    """Run commands from a file using subprocess."""
+
     process = subprocess.Popen(
         [
             "sftp",

@@ -1,13 +1,13 @@
 import subprocess
+from pathlib import Path
 
 from commands import config
 from utils import text
 
 
-def check(keys_path):
-    """
-    Checks SSH connection with the device.
-    """
+def check(keys_path: Path) -> None:
+    """Check SSH connection with the device."""
+
     cfg_obj = config.get()
 
     process = subprocess.Popen(
@@ -17,8 +17,8 @@ def check(keys_path):
             "-i",
             f"{keys_path}/ecdsa",
             "-p",
-            str(cfg_obj.get("port")),
-            f"reader@{cfg_obj.get('ip')}",
+            str(cfg_obj["port"]),
+            f"reader@{cfg_obj['ip']}",
             "exit",
         ],
         stdout=subprocess.PIPE,

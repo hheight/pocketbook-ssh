@@ -1,18 +1,27 @@
 import json
 from pathlib import Path
+from typing import Literal
 
 from constants import CONFIG_FILE
 from utils import text
 
 
-def write_to_file(homepath, port, ip):
+def write_to_file(homepath: str, port: str, ip: str) -> None:
+    """
+    Write config data to a file.
+    """
+
     with open(CONFIG_FILE, "w") as f:
         f.write(json.dumps({"homepath": homepath, "port": port, "ip": ip}))
 
     print(text.style("Config saved successfully!", "green"))
 
 
-def get():
+def get() -> dict[Literal["homepath", "ip", "port"], str]:
+    """
+    Get config dictionary from a file with `homepath`, `port` and `ip` values.
+    """
+
     cfg_path = Path(CONFIG_FILE)
 
     if not cfg_path.exists() or not cfg_path.read_text():
@@ -30,7 +39,15 @@ def get():
     return cfg_obj
 
 
-def get_default_values():
+def get_default_values() -> tuple[
+    str | Literal["/"], str | Literal[""], str | Literal[""]
+]:
+    """
+    Get default config values.
+
+    Reads config file and returns tuple with `homepath`, `port` and `ip` values.
+    """
+
     homepath, ip, port = ("/", "", "")
     config_path = Path(CONFIG_FILE)
 

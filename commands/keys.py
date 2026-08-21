@@ -1,9 +1,11 @@
 import subprocess
+from pathlib import Path
 
 
-def generate(path):
+def generate(path: Path) -> bool:
     """
     Generates SSH key pair with `ssh-keygen`.
+
     ECDSA key format is used.
     """
 
