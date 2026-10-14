@@ -6,7 +6,7 @@ from prompt_toolkit.completion import PathCompleter
 from prompt_toolkit.shortcuts import prompt
 from prompt_toolkit.styles import Style
 
-from commands import config
+from commands import config, connection
 from constants import COMMANDS_FILE
 from utils import text
 
@@ -73,7 +73,6 @@ def transfer(action: Literal["download", "upload"], keys_path: Path) -> None:
 
         _write_to_commands_file("put", upload_from_path, upload_to_path)
 
-    print("Connecting to the device...")
     _run_commands(keys_path, str(device_port), device_ip)
     print(text.style("Files transferred successfully!", "green"))
 
@@ -89,6 +88,10 @@ def _write_to_commands_file(
 
 def _run_commands(keys_path: Path, port: str, ip: str) -> None:
     """Run commands from a file using subprocess."""
+
+    connection.ensure_connection(
+        keys_path, port, ip, message="Connecting to PocketBook"
+    )
 
     process = subprocess.Popen(
         [
