@@ -84,7 +84,7 @@ def _write_to_commands_file(
     """Write commands to a file."""
 
     with open(COMMANDS_FILE, "w") as f:
-        f.write(f'{command} -r "{from_path}" "{to_path}"\nbye')
+        f.write(f'progress\n{command} -r "{from_path}" "{to_path}"\nbye')
 
 
 def _run_commands(keys_path: Path, port: str, ip: str) -> None:
@@ -95,21 +95,13 @@ def _run_commands(keys_path: Path, port: str, ip: str) -> None:
             "sftp",
             "-b",
             COMMANDS_FILE,
-            "-N",
             "-i",
             f"{keys_path}/ecdsa",
             "-P",
             str(port),
             f"reader@{ip}",
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        text=True,
+        ]
     )
-
-    if process.stdout:
-        for line in process.stdout:
-            print(line)
 
     if process.wait() != 0:
         raise Exception(
