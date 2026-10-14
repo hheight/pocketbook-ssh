@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-python3 main.py
+exec uv run python main.py

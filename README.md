@@ -6,13 +6,12 @@ This CLI application allows you to transfer files to/from your e-reader using SF
 
 1. PocketBook device with KOReader installed. Installation instructions: https://github.com/koreader/koreader/wiki/Installation-on-PocketBook-devices.
 2. Python version 3.11 or later.
-3. `uv` (or install `prompt-toolkit` manually with pip).
+3. `uv`.
 
 ## Usage
 
 1. Clone the project and go to its folder.
-2. Install dependencies: `uv sync`
-3. Run `./main.sh` in a terminal:
+2. Run `./main.sh` in a terminal. The script uses `uv` to create or update the project environment and install dependencies:
    1. If you're running the application for the first time, start with generating SSH keys and config setup.
    2. Follow the user-friendly on-screen instructions.
 
