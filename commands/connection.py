@@ -76,4 +76,4 @@ def check(keys_path: Path) -> None:
 
     cfg_obj = config.get()
     ensure_connection(keys_path, cfg_obj["port"], cfg_obj["ip"])
-    print(text.style("Successful connection", "green"))
+    print(text.style("Connection successful.", "green"))

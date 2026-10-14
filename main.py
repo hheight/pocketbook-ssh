@@ -39,9 +39,13 @@ def main():
                     try:
                         if keys.generate(keys_path):
                             instructions.show("keys")
+                        else:
+                            print(
+                                f"{text.style('Error:', 'red')} SSH key generation failed."
+                            )
                     except Exception:
                         print(
-                            f"{text.style('Error:', 'red')} Failed to generate ssh keys."
+                            f"{text.style('Error:', 'red')} Failed to generate SSH keys."
                         )
 
                 case "transfer":
@@ -56,10 +60,9 @@ def main():
 
                         files.transfer(transfer_choice, keys_path)
                     except KeyboardInterrupt:
-                        print("\n")
                         print("Operation canceled.")
                     except Exception as e:
-                        print(e)
+                        print(f"{text.style('Error:', 'red')} {e}")
 
                 case "config":
                     instructions.show("config")
@@ -95,16 +98,17 @@ def main():
 
                         config.write_to_file(homepath, port, ip)
                     except KeyboardInterrupt:
-                        print("\n")
                         print("Operation canceled.")
                     except Exception as e:
-                        print(e)
+                        print(f"{text.style('Error:', 'red')} {e}")
 
                 case "connect":
                     try:
                         connection.check(keys_path)
+                    except KeyboardInterrupt:
+                        print("Operation canceled.")
                     except Exception as e:
-                        print(e)
+                        print(f"{text.style('Error:', 'red')} {e}")
 
                 case "exit":
                     print(text.style("See you!", "green"))

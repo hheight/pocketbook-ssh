@@ -14,7 +14,7 @@ def write_to_file(homepath: str, port: str, ip: str) -> None:
     with open(CONFIG_FILE, "w") as f:
         f.write(json.dumps({"homepath": homepath, "port": port, "ip": ip}))
 
-    print(text.style("Config saved successfully!", "green"))
+    print(text.style("Config saved successfully.", "green"))
 
 
 def get() -> dict[Literal["homepath", "ip", "port"], str]:
