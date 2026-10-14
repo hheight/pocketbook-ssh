@@ -125,7 +125,7 @@ def main():
                         text.print_error(str(e))
 
                 case "exit":
-                    text.print_success("See you!")
+                    text.print_success("See you!", blank_line=False)
                     break
 
             print()

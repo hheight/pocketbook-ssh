@@ -16,10 +16,11 @@ def style(text: str, style: str) -> str:
             return text
 
 
-def print_success(message: str) -> None:
+def print_success(message: str, blank_line: bool = True) -> None:
     """Print a green success or informational message."""
 
-    print()
+    if blank_line:
+        print()
     print(style(message, "green"))
 
 
