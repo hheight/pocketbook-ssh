@@ -1,6 +1,8 @@
+from contextlib import redirect_stdout
+from io import StringIO
 import unittest
 
-from text import style
+from text import print_error, print_success, style
 
 
 class TestStyleText(unittest.TestCase):
@@ -39,3 +41,34 @@ class TestStyleText(unittest.TestCase):
         styled_text = style(text, "default")
 
         self.assertEqual(styled_text, text)
+
+
+class TestPrintMessages(unittest.TestCase):
+    def test_print_success(self):
+        output = StringIO()
+
+        with redirect_stdout(output):
+            print_success("Saved successfully.")
+
+        self.assertEqual(output.getvalue(), "\n\033[32mSaved successfully.\033[0m\n")
+
+    def test_print_error_uses_default_red_label(self):
+        output = StringIO()
+
+        with redirect_stdout(output):
+            print_error("Something failed.")
+
+        self.assertEqual(
+            output.getvalue(), "\n\033[31mError:\033[0m Something failed.\n"
+        )
+
+    def test_print_error_accepts_custom_red_text(self):
+        output = StringIO()
+
+        with redirect_stdout(output):
+            print_error("No key pair was created.", red_text="Key generation failed:")
+
+        self.assertEqual(
+            output.getvalue(),
+            "\n\033[31mKey generation failed:\033[0m No key pair was created.\n",
+        )

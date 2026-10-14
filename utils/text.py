@@ -14,3 +14,17 @@ def style(text: str, style: str) -> str:
             return f"\033[1m{text}\033[0m"
         case _:
             return text
+
+
+def print_success(message: str) -> None:
+    """Print a green success or informational message."""
+
+    print()
+    print(style(message, "green"))
+
+
+def print_error(message: str, red_text: str = "Error:") -> None:
+    """Print an error message with a customizable red label."""
+
+    print()
+    print(f"{style(red_text, 'red')} {message}")

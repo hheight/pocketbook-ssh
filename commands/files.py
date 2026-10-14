@@ -74,7 +74,7 @@ def transfer(action: Literal["download", "upload"], keys_path: Path) -> None:
         _write_to_commands_file("put", upload_from_path, upload_to_path)
 
     _run_commands(keys_path, str(device_port), device_ip)
-    print(text.style("Transfer completed successfully.", "green"))
+    text.print_success("Transfer completed successfully.")
 
 
 def _write_to_commands_file(

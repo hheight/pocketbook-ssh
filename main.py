@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from prompt_toolkit.formatted_text import HTML
 from prompt_toolkit.shortcuts import choice, prompt
 from prompt_toolkit.styles import Style
 
@@ -12,6 +13,12 @@ prompt_style = Style.from_dict(
         "key": "ansiyellow",
     }
 )
+menu_style = Style.from_dict(
+    {
+        "frame.border": "ansicyan",
+        "bottom-toolbar": "fg:ansiwhite bg:ansiblack noreverse",
+    }
+)
 
 
 def main():
@@ -21,7 +28,7 @@ def main():
     while True:
         try:
             main_menu_choice = choice(
-                message="Main menu",
+                message=HTML("<b><ansiyellow>Main menu</ansiyellow></b>"),
                 options=[
                     ("transfer", "Transfer files"),
                     ("connect", "Check connection"),
@@ -29,7 +36,11 @@ def main():
                     ("config", "Set up device config"),
                     ("exit", "Exit"),
                 ],
+                style=menu_style,
+                show_frame=True,
             )
+
+            print()
 
             match main_menu_choice:
                 case "generate":
@@ -40,32 +51,35 @@ def main():
                         if keys.generate(keys_path):
                             instructions.show("keys")
                         else:
-                            print(
-                                f"{text.style('Error:', 'red')} SSH key generation failed."
+                            text.print_error(
+                                "No key pair was created.",
+                                red_text="SSH key generation failed:",
                             )
                     except Exception:
-                        print(
-                            f"{text.style('Error:', 'red')} Failed to generate SSH keys."
-                        )
+                        text.print_error("Failed to generate SSH keys.")
 
                 case "transfer":
                     try:
                         transfer_choice = choice(
-                            message="Choose an option:",
+                            message=HTML("<b>File transfer</b>"),
                             options=[
                                 ("upload", "Upload"),
                                 ("download", "Download"),
                             ],
+                            style=menu_style,
+                            show_frame=True,
                         )
 
+                        print()
                         files.transfer(transfer_choice, keys_path)
                     except KeyboardInterrupt:
                         print("Operation canceled.")
                     except Exception as e:
-                        print(f"{text.style('Error:', 'red')} {e}")
+                        text.print_error(str(e))
 
                 case "config":
                     instructions.show("config")
+                    print()
 
                     try:
                         default_homepath, default_ip, default_port = (
@@ -100,7 +114,7 @@ def main():
                     except KeyboardInterrupt:
                         print("Operation canceled.")
                     except Exception as e:
-                        print(f"{text.style('Error:', 'red')} {e}")
+                        text.print_error(str(e))
 
                 case "connect":
                     try:
@@ -108,12 +122,13 @@ def main():
                     except KeyboardInterrupt:
                         print("Operation canceled.")
                     except Exception as e:
-                        print(f"{text.style('Error:', 'red')} {e}")
+                        text.print_error(str(e))
 
                 case "exit":
-                    print(text.style("See you!", "green"))
+                    text.print_success("See you!")
                     break
 
+            print()
             prompt(
                 [
                     ("", "Press "),
@@ -122,6 +137,7 @@ def main():
                 ],
                 style=prompt_style,
             )
+            print()
         except KeyboardInterrupt:
             try:
                 prompt(
@@ -133,7 +149,7 @@ def main():
                     style=prompt_style,
                 )
             except KeyboardInterrupt:
-                print(text.style("See you!", "green"))
+                text.print_success("See you!")
                 break
 
 

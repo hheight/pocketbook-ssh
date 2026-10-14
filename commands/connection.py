@@ -8,9 +8,7 @@ from commands import config
 from utils import text
 
 
-def _communicate_with_spinner(
-    process: subprocess.Popen, message: str
-) -> str:
+def _communicate_with_spinner(process: subprocess.Popen, message: str) -> str:
     """Wait for the SSH check while showing activity in an interactive terminal."""
 
     if not sys.stdout.isatty():
@@ -76,4 +74,4 @@ def check(keys_path: Path) -> None:
 
     cfg_obj = config.get()
     ensure_connection(keys_path, cfg_obj["port"], cfg_obj["ip"])
-    print(text.style("Connection successful.", "green"))
+    text.print_success("Connection successful.")
